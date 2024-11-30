@@ -18,3 +18,41 @@ CREATE INDEX idx_property_created_at ON Property(created_at);
 
 -- 7. Index on status in the Booking table (for filtering bookings by status)
 CREATE INDEX idx_booking_status ON Booking(status);
+
+
+-- Measure query performance for fetching confirmed bookings with user and property details
+EXPLAIN ANALYZE
+SELECT
+    b.booking_id,
+    b.start_date,
+    b.end_date,
+    b.total_price,
+    b.status AS booking_status,
+    u.first_name AS user_first_name,
+    u.last_name AS user_last_name,
+    p.name AS property_name,
+    p.location AS property_location
+FROM Booking b
+INNER JOIN User u ON b.user_id = u.user_id
+INNER JOIN Property p ON b.property_id = p.property_id
+WHERE b.status = 'confirmed'
+  AND b.created_at >= '2024-01-01';
+
+
+-- Re-measuring query performance with the newly created indexes
+EXPLAIN ANALYZE
+SELECT
+    b.booking_id,
+    b.start_date,
+    b.end_date,
+    b.total_price,
+    b.status AS booking_status,
+    u.first_name AS user_first_name,
+    u.last_name AS user_last_name,
+    p.name AS property_name,
+    p.location AS property_location
+FROM Booking b
+INNER JOIN User u ON b.user_id = u.user_id
+INNER JOIN Property p ON b.property_id = p.property_id
+WHERE b.status = 'confirmed'
+  AND b.created_at >= '2024-01-01';

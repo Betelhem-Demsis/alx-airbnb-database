@@ -17,10 +17,11 @@ SELECT
     Property.name AS property_name,
     Property.location,
     Property.pricepernight,
-    Review.rating,
-    Review.comment
+    Review.rating AS review_rating,
+    Review.comment AS review_comment
 FROM Property
-LEFT JOIN Review ON Property.property_id = Review.property_id;
+LEFT JOIN Review ON Property.property_id = Review.property_id
+ORDER BY Property.property_id;
 
 -- Query 3: Retrieve all users and all bookings, even if the user has no booking or a booking is not linked to a user
 SELECT 
